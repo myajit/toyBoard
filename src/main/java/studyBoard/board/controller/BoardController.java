@@ -1,6 +1,7 @@
 package studyBoard.board.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,15 +35,41 @@ public class BoardController extends HttpServlet{
 		case "update":
 			update(req,resp);
 			break;
+		case "del":
+			del(req,resp);
+			break;
 		default:
 			break;
 		}
 		
 	}
 
-	private void update(HttpServletRequest req, HttpServletResponse resp) {
-		// TODO Auto-generated method stub
+	private void del(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
+		req.setCharacterEncoding("utf-8");
+		
+		int boardIdx = Integer.parseInt(req.getParameter("boardIdx"));
+		
+		boardService.del(boardIdx);
+		resp.sendRedirect("/index");
+		
+	}
+
+	private void update(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		
+		req.setCharacterEncoding("utf-8");
+		
+		int boardIdx = Integer.parseInt(req.getParameter("boardIdx"));
+		String title = req.getParameter("title");
+		String content = req.getParameter("content");
+		
+		Board board = new Board();
+		board.setTableIdx(boardIdx);
+		board.setTitle(title);
+		board.setContent(content);
+		
+		boardService.updateBoard(board);
+		resp.sendRedirect("/index");
 	}
 
 	private void writeInput(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -63,6 +90,7 @@ public class BoardController extends HttpServlet{
 		
 		int boardIdx = Integer.parseInt(req.getParameter("boardIdx"));
 		Board board = boardService.serlectBoardByIdx(boardIdx);
+		
 		req.setAttribute("board", board);
 		req.getRequestDispatcher("/WEB-INF/views/board/detail.jsp").forward(req, resp);
 		

@@ -100,5 +100,86 @@ public class BoardDao {
 		}
 		
 	}
+
+	public void updateBoard(Board board, Connection conn) {
+		
+		PreparedStatement pstm = null;
+		String query = "update \"board\" set title = ?, content = ? where table_idx = ?";
+		
+		try {
+			pstm = conn.prepareStatement(query);
+			pstm.setString(1, board.getTitle());
+			pstm.setString(2, board.getContent());
+			pstm.setInt(3, board.getTableIdx());
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			template.close(pstm);
+		}
+	}
+
+	public void deleteBoard(int boardIdx, Connection conn) {
+		
+		PreparedStatement pstm = null;
+		String query = "delete from \"board\" where table_idx = ?";
+		
+		try {
+			pstm = conn.prepareStatement(query);
+			pstm.setInt(1, boardIdx);
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			template.close(pstm);
+		}
+		
+	}
+
+	public void insertHit(int boardIdx,int hit, Connection conn) {
+		
+		String user = "jung";
+		
+		String sql = "update \"board\" set hit=? where table_idx = ?";
+		
+		PreparedStatement pstm = null;
+		
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, hit+1);
+			pstm.setInt(2, boardIdx);
+			pstm.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			template.close(pstm);
+		}
+		
+	}
+
+	public int selectByHit(int boardIdx,Connection conn) {
+		String sql = "select hit from \"board\" where table_idx = ?";
+		
+		PreparedStatement pstm = null;
+		ResultSet rset = null;
+		int hit = 0;
+		
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, boardIdx);
+			rset = pstm.executeQuery();
+			
+			if(rset.next()) {
+				hit = rset.getInt("hit");
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			template.close(rset, pstm);
+		}
+		
+		return hit;
+	}
 	
 }
