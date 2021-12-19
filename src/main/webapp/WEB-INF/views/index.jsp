@@ -42,18 +42,20 @@
                     </thead>
             
                     <tbody>
+                    	<c:forEach var="list" items="${boardList}">
                             <tr class="board">
-                                <td class="td_num">0</td>
-                                <td class="td_content">
-                                <a href="#">
-                                    운영제한 9시(9시수업 없어짐) ~  1월 2일까지
+                                <td class="td_num">${list.tableIdx}</td>
+                                <td class="td_title">
+                                <a href="/board/detail?boardIdx=${list.tableIdx}">
+                                    ${list.title}
                                 </a>
                                 </td>
-                                <td class="td_name">jung</td>
-                                <td class="td_date">2021.12.17</td>
-                                <td class="td_view">29</td>
-                                <td class="td_likes">0</td>
+                                <td class="td_name">${list.userId}</td>
+                                <td class="td_date">${list.parseDate}</td>
+                                <td class="td_view">${list.hit}</td>
+                                <td class="td_likes">${list.love}</td>
                             </tr>
+                        </c:forEach>
                     </tbody>
                 </table>
                 

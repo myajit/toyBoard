@@ -16,17 +16,51 @@ public class BoardService {
 	
 	public List<Board> selectBoardAll() {
 	
-		List<Board> boardList = new ArrayList<Board>();
+		List<Board> boardList = null;
 		
 		Connection conn = template.getConnection();
 		
 		try {
-			boardDao.selectBoardAll(conn);
+			boardList = boardDao.selectBoardAll(conn);
 		} finally {
 			template.close(conn);
 		}
 		
 		return boardList;
+		
+	}
+
+	public Board serlectBoardByIdx(int boardIdx) {
+		
+		Board board = null;
+		
+		Connection conn = template.getConnection();
+		
+		try {
+			board = boardDao.selectBoardByidx(boardIdx, conn);
+		} finally {
+			template.close(conn);
+		}
+		
+		return board;
+	}
+
+	public void insertBoard(Board board) {
+		
+		Connection conn = template.getConnection();
+		
+		try {
+			boardDao.insertBoard(board,conn);
+//			for (FileDTO fileDTO : fileDTOs) {
+//				boardDao.insertFile(fileDTO,conn);
+//			}
+			template.commit(conn);
+		}catch (Exception e) {
+			template.rollback(conn);
+			throw e;
+		}finally {
+			template.close(conn);
+		}
 		
 	}
 	

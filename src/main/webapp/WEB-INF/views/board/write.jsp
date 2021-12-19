@@ -19,18 +19,18 @@
     <div class="board-wrap">
        
         <div class="wt-board">
-            <form action="" method="post">
+            <form action="/board/write-input" method="post">
                 <div class="input-title-file">
-                    <input type="text" placeholder="제목을 입력해 주세요." maxlength="20">
+                    <input type="text" name="title" placeholder="제목을 입력해 주세요." maxlength="20">
                     <div class="fileBox">
                         <label for="ex-file">파일올리기</label>
                         <input type="file" id="ex-file">
                     </div>
                 </div>
                 <div class="input-content">
-                    <textarea class="content" name="opinion" placeholder="내용"></textarea>
+                    <textarea class="content" name="content" placeholder="내용"></textarea>
                 </div>
-                <input class="submit-button" type="submit" value="보내기">
+                <input class="submit-button" type="submit" value="글쓰기">
             </form>
         </div>
         

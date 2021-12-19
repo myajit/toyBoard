@@ -22,7 +22,15 @@ public class IndexController extends HttpServlet{
 		
 		List<Board> boardList = boardService.selectBoardAll();
 		
+		for (Board board : boardList) {
+			board.setParseDate(board.dateparse(board.getWtDate()));
+		}
+		
+		System.out.println(boardList.toString());
+	
 		req.setAttribute("boardList", boardList);
+		
+		resp.setCharacterEncoding("utf-8");
 		req.getRequestDispatcher("/WEB-INF/views/index.jsp").forward(req, resp);
 	}
 	
