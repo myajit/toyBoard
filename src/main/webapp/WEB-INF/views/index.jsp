@@ -62,11 +62,29 @@
                 <div class="button-wrap">
                     <a class="wt-button" href="/board/write">글쓰기</a>
                 </div>
-                <div class="paging">
+               <!--  <div class="paging">
                     <a class="page-num red-border" href="#">1</a>
                     <a class="page-num " href="#">2</a>
-                </div>
+                </div> -->
+                
+                <c:forEach begin="${pagination.startPage}" end="${endPage}" var="idx">
+					<a class="page-num" href="#" onClick="fn_pagination('${idx}', '${idx}', '${pagination.rangeSize}')"> ${idx} </a>
+				</c:forEach>
+
         </div>
     </div>
+    
+    <script type="text/javascript">
+    
+    	function fn_pagination(page, range, rangeSize, searchType, keyword) {
+
+			var url = "${pageContext.request.contextPath}/index";
+			url = url + "?page=" + page;
+			url = url + "&range=" + range;
+			location.href = url;	
+
+		}
+
+    </script>
 </body>
 </html>

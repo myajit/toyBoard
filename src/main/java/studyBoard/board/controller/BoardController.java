@@ -92,6 +92,7 @@ public class BoardController extends HttpServlet{
 		Board board = boardService.serlectBoardByIdx(boardIdx);
 		
 		req.setAttribute("board", board);
+		
 		req.getRequestDispatcher("/WEB-INF/views/board/detail.jsp").forward(req, resp);
 		
 	}

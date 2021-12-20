@@ -7,9 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
 import studyBoard.board.model.dto.Board;
 import studyBoard.common.db.JDBCTemplate;
+import studyBoard.common.page.pagination;
 
+@Slf4j
 public class BoardDao {
 	JDBCTemplate template = JDBCTemplate.getInstance();
 	
@@ -180,6 +183,48 @@ public class BoardDao {
 		}
 		
 		return hit;
+	}
+
+	public List<Board> selectBoardPage(pagination pagination, Connection conn) {
+		String sql = "select A.* from "
+				+ "(select COUNT(*) OVER() AS TOTAL_COUNT, AA.* from "
+				+ "(SELECT ROW_NUMBER() OVER (ORDER BY table_idx DESC) RNUM, "
+				+ "table_idx,title,content,user_id,wt_date,hit,love from \"board\")AA "
+				+ ")A where a.rnum between ? and ?";
+		
+		PreparedStatement pstm = null;
+		ResultSet rset = null;
+		Board board = null;
+		List<Board> boardList = new ArrayList<>();
+		
+		try {
+			pstm = conn.prepareStatement(sql);
+			log.info("rang={}",pagination.getRange());
+			pstm.setInt(1, pagination.getStartPage());
+			log.info("page={}",pagination.getStartPage());
+			pstm.setInt(2, pagination.getRange()*10);
+			log.info("page={}",pagination.getEndPage());
+			rset = pstm.executeQuery();
+			
+			while(rset.next()) {
+				board = new Board();
+				board.setTableIdx(rset.getInt("table_idx"));
+				board.setTitle(rset.getString("title"));
+				board.setContent(rset.getString("content"));
+				board.setUserId(rset.getString("user_id"));
+				board.setWtDate(rset.getDate("wt_date"));
+				board.setHit(rset.getInt("hit"));
+				board.setLove(rset.getInt("love"));
+				boardList.add(board);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			template.close(rset, pstm);
+		}
+		
+		return boardList;
 	}
 	
 }

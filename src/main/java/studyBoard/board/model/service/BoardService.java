@@ -9,6 +9,7 @@ import java.util.List;
 import studyBoard.board.model.dao.BoardDao;
 import studyBoard.board.model.dto.Board;
 import studyBoard.common.db.JDBCTemplate;
+import studyBoard.common.page.pagination;
 
 public class BoardService {
 
@@ -98,6 +99,20 @@ public class BoardService {
 			template.close(conn);
 		}
 		
+	}
+
+	public List<Board> selectBoardPage(pagination pagination) {
+		List<Board> boardList = null;
+		
+		Connection conn = template.getConnection();
+		
+		try {
+			boardList = boardDao.selectBoardPage(pagination,conn);
+		} finally {
+			template.close(conn);
+		}
+		
+		return boardList;
 	}
 	
 }
