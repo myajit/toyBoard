@@ -112,6 +112,10 @@ public class BoardService {
 			template.close(conn);
 		}
 		
+		for (Board board : boardList) {
+			board.setParseDate(board.dateparse(board.getWtDate()));
+		}
+			
 		return boardList;
 	}
 	
